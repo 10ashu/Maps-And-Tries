@@ -1,0 +1,106 @@
+#include<bits/stdc++.h>
+using namespace std;
+class TrieNode{
+public:
+char ch;
+TrieNode* children[26];
+bool isterminal;
+TrieNode(char d)
+{
+    this->ch=d;
+    for(int i=0;i<26;i++)
+    {
+        children[i]=NULL;
+    }
+    isterminal=false;
+}
+};
+void insert(TrieNode* root,string word)
+{
+   if(word.length()==0)
+   {
+    root->isterminal=true;
+    return;
+   }
+   char ch=word[0];
+   int index=ch-'a';
+   TrieNode* child;
+   if(root->children[index]!=NULL)
+   {
+      child=root->children[index];
+   }
+   else
+   {
+       child=new TrieNode(ch);
+       root->children[index]=child;
+   }
+   insert(child,word.substr(1));
+}
+bool search(TrieNode* root,string word)
+{
+     if(word.length()==0)
+     {
+        return root->isterminal;
+     }
+     char ch=word[0];
+     int index=ch-'a';
+     TrieNode* child;
+     if(root->children[index]!=NULL)
+     {
+        child=root->children[index];
+     }
+     else{
+        return false;
+     }
+     return search(child,word.substr(1));
+}
+void dele(TrieNode* root,string word)
+{
+    if(word.length()==0)
+    {
+        root->isterminal=false;
+        return ;
+    }
+    char ch=word[0];
+    int index=ch-'a';
+    TrieNode* child;
+    if(root->children[index]!=NULL)
+    {
+        child=root->children[index];
+    }
+    else
+    {
+        cout<<"Invalid Element"<<endl;
+        return ;
+    }
+    dele(child,word.substr(1));
+    
+}
+
+int main()
+{
+    TrieNode* root=new TrieNode('-');
+    insert(root,"code");
+    insert(root,"coding");
+    insert(root,"coder");
+    bool ans=search(root,"code");
+    if(ans)
+    {
+        cout<<"Present"<<endl;
+    }
+    else
+    {
+        cout<<"Absent"<<endl;
+    }
+    dele(root,"codeewqq");
+    bool a=search(root,"code");
+    if(a)
+    {
+        cout<<"Present"<<endl;
+    }
+    else
+    {
+        cout<<"Absent"<<endl;
+    }
+    return 0;
+}
